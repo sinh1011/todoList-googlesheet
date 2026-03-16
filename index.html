@@ -131,8 +131,8 @@
             return state;
         }
 
-        async function apiCall(payload){
-            try{ const r = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }); return await r.json(); } catch(e){ return {ok:false}; }
+async function apiCall(payload){
+          try{ const url = API_URL + '?action=' + payload.action + (payload.data !== undefined ? '&data=' + encodeURIComponent(JSON.stringify(payload.data)) : ''); const r = await fetch(url); return await r.json(); } catch(e){ return {ok:false}; }
         }
 
         function debouncedSave(){
