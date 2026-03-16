@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>React Core – Daily Checklist (Google Sheet)</title>
+<script>
+// API URL - thay YOUR_DEPLOYMENT_ID bằng deployment ID thực
+const API_URL = 'https://script.google.com/macros/s/AKfycbxgAgQcs_rtprNMrjR-E2piVBdSk3Sr-QHER_Eq-C4IplnD0oT2cZgJ3JAJEaB9jXlk/exec';
+
+async function loadState() {
+  try {
+    const response = await fetch(API_URL + '?action=getAll');
+    const result = await response.json();
+    if (result.ok) return result.data || {};
+  } catch(e) { console.error('Load error:', e); }
+  return {};
+}
+
+async function saveState(state) {
+  try {
+    await fetch(API_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ action: 'saveAll', data: state })
+    });
+  } catch(e) { console.error('Save error:', e); }
+}
+
+async function toggleItem(itemId, checked) {
+  try {
+    await fetch(API_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ action: 'toggle', item_id: itemId, checked })
+    });
+  } catch(e) { console.error('Toggle error:', e); }
+}
+
+async function resetData() {
+  try {
+    await fetch(API_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ action: 'resetAll' })
+    });
+  } catch(e) { console.error('Reset error:', e); }
+}
+</script>
+</head>
+<body>
+<div id="app">Loading...</div>
+<script>
+// Phần còn lại copy nguyên từ code gốc, chỉ thay đổi các hàm loadState/saveState
+// Bạn cần paste phần HTML/CSS và DATA từ code gốc vào đây
+</script>
+</body>
+</html>
