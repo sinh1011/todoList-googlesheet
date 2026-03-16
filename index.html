@@ -137,7 +137,10 @@
 
         function debouncedSave(){
             if(saveTimeout) clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(() => apiCall({ action: 'saveAll', data: checked }), 800);
+            saveTimeout = setTimeout(async () => {
+                const res = await apiCall({ action: 'saveAll', data: checked });
+                if(!res.ok) alert("Lỗi lưu dữ liệu!");
+            }, 1000);
         }
 
         async function init(){
@@ -173,8 +176,8 @@
                 if(items.length) body.appendChild(renderList(items));
                 sections.forEach(s => {
                     const sDiv = document.createElement("div"); sDiv.className = "section";
-                    const done = s.items.filter(it => checked[it.id]).length;
-                    sDiv.innerHTML = `<div class="sectionTitleRow"><div class="sectionTitle">${s.title}</div><div class="badge">${done}/${s.items.length}</div></div>`;
+                    const doneCount = s.items.filter(it => checked[it.id]).length;
+                    sDiv.innerHTML = `<div class="sectionTitleRow"><div class="sectionTitle">${s.title}</div><div class="badge">${doneCount}/${s.items.length}</div></div>`;
                     sDiv.appendChild(renderList(s.items)); body.appendChild(sDiv);
                 });
                 card.appendChild(body); appEl.appendChild(card);
@@ -209,7 +212,7 @@
 
         daySelect.onchange = (e) => { selectedDay = e.target.value; render(); };
         searchInput.oninput = (e) => { query = e.target.value; render(); };
-        resetBtn.onclick = async () => { if(confirm("Reset?")){ checked = buildDefaultState(); render(); apiCall({ action: 'saveAll', data: checked }); }};
+        resetBtn.onclick = async () => { if(confirm("Reset?")){ checked = buildDefaultState(); render(); await apiCall({ action: 'saveAll', data: checked }); }};
         markVisibleBtn.onclick = () => {
             const q = query.trim().toLowerCase(), wantDay = selectedDay !== "all" ? selectedDay : null;
             DATA.forEach(b => {
