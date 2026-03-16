@@ -17,7 +17,6 @@
         .subtitle{ margin:6px 0 0; font-size: 13px; color: var(--muted); }
         .quickActions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
         .chip{ display:flex; align-items:center; gap:8px; padding: 10px 12px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,.04); backdrop-filter: blur(10px); box-shadow: 0 10px 25px rgba(0,0,0,.25); user-select:none; }
-        .chip strong{ font-weight: 800; }
         .dot{ width:10px; height:10px; border-radius: 99px; background: linear-gradient(135deg, var(--good), var(--accent2)); box-shadow: 0 0 0 4px rgba(46,229,157,.10); }
         button{ cursor:pointer; border: 1px solid var(--line); background: rgba(255,255,255,.05); color: var(--text); padding: 10px 12px; border-radius: 14px; font-weight: 700; transition: transform .08s ease, border-color .15s ease, background .15s ease; }
         button:hover{ border-color: rgba(124,92,255,.45); background: rgba(124,92,255,.10); }
@@ -47,13 +46,9 @@
         .cardHead .small{ margin-top:6px; color: rgba(234,240,255,.65); font-size: 12px; }
         .cardBody{ padding: 12px 14px 14px; }
         .section{ padding: 12px 0; border-top: 1px dashed rgba(255,255,255,.12); }
-        .section:first-child{ border-top:none; padding-top: 4px; }
         .sectionTitleRow{ display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom: 10px; }
         .sectionTitle{ display:flex; align-items:center; gap:10px; font-weight: 800; letter-spacing:.15px; }
         .badge{ font-size: 12px; padding: 5px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); color: rgba(234,240,255,.85); white-space: nowrap; }
-        .badge.ok{ border-color: rgba(46,229,157,.25); background: rgba(46,229,157,.08); }
-        .badge.mid{ border-color: rgba(255,176,32,.28); background: rgba(255,176,32,.08); }
-        .badge.low{ border-color: rgba(255,77,109,.30); background: rgba(255,77,109,.10); }
         ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; }
         .task{ border: 1px solid rgba(255,255,255,.10); background: rgba(0,0,0,.18); border-radius: 16px; padding: 10px 12px; transition: transform .08s ease, border-color .15s ease, background .15s ease; }
         .task:hover{ border-color: rgba(124,92,255,.35); background: rgba(124,92,255,.07); }
@@ -62,29 +57,16 @@
         .taskText{ line-height: 1.25; font-size: 14px; }
         .taskText.done{ text-decoration: line-through; opacity: .70; }
         footer{ margin-top: 18px; color: rgba(234,240,255,.55); font-size: 12px; text-align:center; }
-        .loading-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(7, 10, 20, 0.8); display: flex; align-items: center;
-            justify-content: center; z-index: 1000; font-weight: bold;
-        }
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 10, 20, 0.8); display: flex; align-items: center; justify-content: center; z-index: 1000; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div id="loading" class="loading-overlay">Đang tải dữ liệu từ Google Sheet...</div>
+    <div id="loading" class="loading-overlay">Đang tải dữ liệu...</div>
     <div class="wrap">
         <header class="topbar">
-            <div class="brand">
-                <div class="logo"></div>
-                <div>
-                    <h1>React Core – Daily Checklist</h1>
-                    <p class="subtitle">Dữ liệu lưu trên Google Sheet ☁️</p>
-                </div>
-            </div>
+            <div class="brand"><div class="logo"></div><div><h1>React Core – Daily Checklist</h1><p class="subtitle">Lưu trữ Google Sheet ☁️</p></div></div>
             <div class="quickActions">
-                <div class="chip">
-                    <div class="dot"></div>
-                    <span id="progressText">0/0 • 0%</span>
-                </div>
+                <div class="chip"><div class="dot"></div><span id="progressText">0/0 • 0%</span></div>
                 <button id="markVisibleBtn">✅ Tick phần đang xem</button>
                 <button id="resetBtn" class="danger">↺ Reset</button>
             </div>
@@ -92,43 +74,27 @@
 
         <div class="summaryGrid">
             <div class="panel">
-                <div class="panelTitle">
-                    <h2>Progress tổng</h2>
-                    <span class="badge ok" id="percentText">0%</span>
-                </div>
-                <div class="bigNumber" style="margin-bottom:8px">Cứ mỗi ngày tick chút là auto lên trình 🚀</div>
+                <div class="panelTitle"><h2>Progress tổng</h2><span class="badge" id="percentText">0%</span></div>
+                <div class="bigNumber">Cứ mỗi ngày tick chút là auto lên trình 🚀</div>
                 <div class="progressBar"><div id="barFill" class="progressFill"></div></div>
             </div>
             <div class="panel">
                 <div class="panelTitle"><h2>Tip nhỏ</h2></div>
-                <div class="summaryRow">
-                    <span class="muted" id="doneText">Done: 0</span>
-                    <span class="muted" id="totalText">Total: 0</span>
-                </div>
+                <div class="summaryRow"><span class="muted" id="doneText">Done: 0</span><span class="muted" id="totalText">Total: 0</span></div>
                 <div class="muted">Học mỗi ngày 30–45 phút là đủ 😌</div>
             </div>
         </div>
 
         <div class="controls">
-            <div class="field">
-                <label>Chọn ngày</label>
-                <select id="daySelect"></select>
-            </div>
-            <div class="field grow">
-                <label>Tìm nhanh</label>
-                <input id="searchInput" placeholder="Ví dụ: useState, props, map...">
-            </div>
+            <div class="field"><label>Chọn ngày</label><select id="daySelect"></select></div>
+            <div class="field grow"><label>Tìm nhanh</label><input id="searchInput" placeholder="Ví dụ: useState, props, map..."></div>
         </div>
-
         <div id="app" class="content"></div>
-        <footer>
-            <div class="hint">Muốn sửa checklist: chỉnh <strong>DATA</strong> ở trong file này ✨</div>
-        </footer>
+        <footer><div class="hint">Muốn sửa checklist: chỉnh <strong>DATA</strong> ở trong file này ✨</div></footer>
     </div>
 
     <script>
         const API_URL = 'https://script.google.com/macros/s/AKfycbxgAgQcs_rtprNMrjR-E2piVBdSk3Sr-QHER_Eq-C4IplnD0oT2cZgJ3JAJEaB9jXlk/exec';
-        
         const DATA = [
             { id: "stage0", title: "Giai đoạn 0 – Ôn JS (Hoàn thành)", desc: "Bạn đã làm xong phần JS core rồi 🔥", items: [
                 { id: "s0_letconst", text: "let / const", doneByDefault: true },
@@ -139,244 +105,121 @@
             ]},
             { id: "stage1", title: "Giai đoạn 1 – React Core (2–3 tuần)", desc: "Đi đều từng ngày là lên tay nhanh lắm 😤", sections: [
                 { id: "day1", title: "Day 1 – Setup & JSX", items: [
-                    { id: "d1_vite", text: "Tạo project bằng Vite" },
-                    { id: "d1_jsx", text: "Hiểu JSX là gì" },
-                    { id: "d1_app", text: "Tạo component App" },
-                    { id: "d1_component", text: "1️⃣ Component là gì" },
-                    { id: "d1_jsx2", text: "2️⃣ JSX là gì" },
-                    { id: "d1_props", text: "3️⃣ Props" },
-                    { id: "d1_state", text: "4️⃣ State (useState)" },
-                    { id: "d1_list", text: "5️⃣ Render list (map)" },
+                    { id: "d1_vite", text: "Tạo project bằng Vite" }, { id: "d1_jsx", text: "Hiểu JSX là gì" }, { id: "d1_app", text: "Tạo component App" }, { id: "d1_component", text: "1️⃣ Component là gì" }, { id: "d1_jsx2", text: "2️⃣ JSX là gì" }, { id: "d1_props", text: "3️⃣ Props" }, { id: "d1_state", text: "4️⃣ State (useState)" }, { id: "d1_list", text: "5️⃣ Render list (map)" },
                 ]},
-                { id: "day2", title: "Day 2 – Component & Props", items: [
-                    { id: "d2_split", text: "Tách component" },
-                    { id: "d2_props", text: "Truyền props" },
-                    { id: "d2_destructure", text: "Destructuring props" },
-                ]},
-                { id: "day3", title: "Day 3 – useState", items: [
-                    { id: "d3_concept", text: "Khái niệm state" },
-                    { id: "d3_setstate", text: "setState đúng cách" },
-                    { id: "d3_counter", text: "Counter app" },
-                ]},
-                { id: "day4", title: "Day 4 – Event & Conditional Rendering", items: [
-                    { id: "d4_events", text: "onClick / onChange" },
-                    { id: "d4_conditional", text: "Điều kiện &&, ? :" },
-                    { id: "d4_toggle", text: "Toggle show/hide" },
-                ]},
-                { id: "day5", title: "Day 5 – Render List", items: [
-                    { id: "d5_map", text: "map render list" },
-                    { id: "d5_key", text: "key là gì" },
-                    { id: "d5_todo_show", text: "Todo list hiển thị" },
-                ]},
-                { id: "day6", title: "Day 6 – Form & Input", items: [
-                    { id: "d6_controlled", text: "Controlled component" },
-                    { id: "d6_form_add", text: "Form add todo" },
-                ]},
-                { id: "day7", title: "Day 7 – Lifting State", items: [
-                    { id: "d7_lift", text: "Đưa state lên component cha" },
-                    { id: "d7_callback", text: "Truyền callback" },
-                ]},
-                { id: "day8", title: "Day 8 – useEffect cơ bản", items: [
-                    { id: "d8_once", text: "useEffect chạy 1 lần" },
-                    { id: "d8_deps", text: "Dependency array" },
-                ]},
-                { id: "day9", title: "Day 9 – useEffect + API", items: [
-                    { id: "d9_fetch", text: "Fetch API" },
-                    { id: "d9_loading", text: "Loading / error" },
-                ]},
-                { id: "day10", title: "Day 10 – Mini Project", items: [
-                    { id: "d10_todo_full", text: "Todo app hoàn chỉnh" },
-                    { id: "d10_localstorage", text: "LocalStorage" },
-                ]},
+                { id: "day2", title: "Day 2 – Component & Props", items: [{ id: "d2_split", text: "Tách component" }, { id: "d2_props", text: "Truyền props" }, { id: "d2_destructure", text: "Destructuring props" }]},
+                { id: "day3", title: "Day 3 – useState", items: [{ id: "d3_concept", text: "Khái niệm state" }, { id: "d3_setstate", text: "setState đúng cách" }, { id: "d3_counter", text: "Counter app" }]},
+                { id: "day4", title: "Day 4 – Event & Conditional Rendering", items: [{ id: "d4_events", text: "onClick / onChange" }, { id: "d4_conditional", text: "Điều kiện &&, ? :" }, { id: "d4_toggle", text: "Toggle show/hide" }]},
+                { id: "day5", title: "Day 5 – Render List", items: [{ id: "d5_map", text: "map render list" }, { id: "d5_key", text: "key là gì" }, { id: "d5_todo_show", text: "Todo list hiển thị" }]},
+                { id: "day6", title: "Day 6 – Form & Input", items: [{ id: "d6_controlled", text: "Controlled component" }, { id: "d6_form_add", text: "Form add todo" }]},
+                { id: "day7", title: "Day 7 – Lifting State", items: [{ id: "d7_lift", text: "Đưa state lên component cha" }, { id: "d7_callback", text: "Truyền callback" }]},
+                { id: "day8", title: "Day 8 – useEffect cơ bản", items: [{ id: "d8_once", text: "useEffect chạy 1 lần" }, { id: "d8_deps", text: "Dependency array" }]},
+                { id: "day9", title: "Day 9 – useEffect + API", items: [{ id: "d9_fetch", text: "Fetch API" }, { id: "d9_loading", text: "Loading / error" }]},
+                { id: "day10", title: "Day 10 – Mini Project", items: [{ id: "d10_todo_full", text: "Todo app hoàn chỉnh" }, { id: "d10_localstorage", text: "LocalStorage" }]},
             ]}
         ];
 
-        const appEl = document.getElementById("app");
-        const daySelect = document.getElementById("daySelect");
-        const searchInput = document.getElementById("searchInput");
-        const resetBtn = document.getElementById("resetBtn");
-        const markVisibleBtn = document.getElementById("markVisibleBtn");
-        const progressText = document.getElementById("progressText");
-        const percentText = document.getElementById("percentText");
-        const doneText = document.getElementById("doneText");
-        const totalText = document.getElementById("totalText");
-        const barFill = document.getElementById("barFill");
-        const loadingEl = document.getElementById("loading");
-
-        let checked = {};
-        let selectedDay = "all";
-        let query = "";
-
-        async function apiCall(data) {
-            try {
-                const res = await fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(data)
-                });
-                return await res.json();
-            } catch (e) { console.error(e); return { ok: false }; }
-        }
-
-        async function loadData() {
-            loadingEl.style.display = 'flex';
-            try {
-                const res = await fetch(API_URL + '?action=getAll');
-                const result = await res.json();
-                if (result.ok) {
-                    checked = result.data || buildDefaultState();
-                } else {
-                    checked = buildDefaultState();
-                }
-            } catch (e) {
-                checked = buildDefaultState();
-            }
-            loadingEl.style.display = 'none';
-            render();
-        }
-
-        function flattenAllItems(data){
-            const items = [];
-            for(const block of data){
-                if(block.items) items.push(...block.items);
-                if(block.sections){
-                    for(const sec of block.sections) items.push(...sec.items);
-                }
-            }
-            return items;
-        }
+        const appEl = document.getElementById("app"), daySelect = document.getElementById("daySelect"), searchInput = document.getElementById("searchInput"), resetBtn = document.getElementById("resetBtn"), markVisibleBtn = document.getElementById("markVisibleBtn"), progressText = document.getElementById("progressText"), percentText = document.getElementById("percentText"), doneText = document.getElementById("doneText"), totalText = document.getElementById("totalText"), barFill = document.getElementById("barFill"), loadingEl = document.getElementById("loading");
+        let checked = {}, selectedDay = "all", query = "", saveTimeout = null;
 
         function buildDefaultState(){
             const state = {};
-            for(const it of flattenAllItems(DATA)){
-                state[it.id] = !!it.doneByDefault;
+            for(const b of DATA){
+                if(b.items) for(const it of b.items) state[it.id] = !!it.doneByDefault;
+                if(b.sections) for(const s of b.sections) for(const it of s.items) state[it.id] = !!it.doneByDefault;
             }
             return state;
         }
 
-        function computeStats(){
-            const allItems = flattenAllItems(DATA);
-            let done = 0;
-            for(const it of allItems) if(checked[it.id]) done++;
-            const total = allItems.length;
-            const percent = total ? Math.round((done/total)*100) : 0;
-            return {done,total,percent};
+        async function apiCall(payload){
+            try{ const r = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }); return await r.json(); } catch(e){ return {ok:false}; }
         }
 
-        function updateProgressUI(){
-            const {done,total,percent} = computeStats();
-            progressText.textContent = `${done}/${total} • ${percent}%`;
-            percentText.textContent = `${percent}%`;
-            doneText.textContent = `Done: ${done}`;
-            totalText.textContent = `Total: ${total}`;
-            barFill.style.width = `${percent}%`;
+        function debouncedSave(){
+            if(saveTimeout) clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => apiCall({ action: 'saveAll', data: checked }), 800);
+        }
+
+        async function init(){
+            loadingEl.style.display = 'flex';
+            try{
+                const r = await fetch(API_URL + '?action=getAll');
+                const res = await r.json();
+                checked = res.ok ? (res.data || buildDefaultState()) : buildDefaultState();
+            } catch(e){ checked = buildDefaultState(); }
+            loadingEl.style.display = 'none';
+            buildDayOptions(); render();
         }
 
         function buildDayOptions(){
-            const stage1 = DATA.find(x => x.id === "stage1");
-            const sections = stage1?.sections || [];
+            const sections = DATA.find(x => x.id === "stage1")?.sections || [];
             daySelect.innerHTML = "";
-            const options = [{id:"all", title:"Tất cả"}, ...sections.map(s => ({id:s.id, title:s.title}))];
-            for(const o of options){
-                const op = document.createElement("option");
-                op.value = o.id;
-                op.textContent = o.title;
-                daySelect.appendChild(op);
-            }
-        }
-
-        function filterData(){
-            const q = query.trim().toLowerCase();
-            const wantDay = selectedDay !== "all" ? selectedDay : null;
-            return DATA.map(block => {
-                const out = {...block};
-                if(out.items){
-                    out.items = out.items.filter(it => !q || it.text.toLowerCase().includes(q));
-                }
-                if(out.sections){
-                    out.sections = out.sections
-                        .filter(sec => !wantDay || sec.id === wantDay)
-                        .map(sec => ({
-                            ...sec,
-                            items: sec.items.filter(it => !q || it.text.toLowerCase().includes(q))
-                        }))
-                        .filter(sec => sec.items.length > 0);
-                }
-                return out;
+            [{id:"all", title:"Tất cả"}, ...sections].forEach(o => {
+                const op = document.createElement("option"); op.value = o.id; op.textContent = o.title; daySelect.appendChild(op);
             });
         }
 
         function render(){
-            const filtered = filterData();
+            const q = query.trim().toLowerCase(), wantDay = selectedDay !== "all" ? selectedDay : null;
             appEl.innerHTML = "";
-            for(const block of filtered){
-                const hasItems = block.items && block.items.length;
-                const hasSecs = block.sections && block.sections.length;
-                if(!hasItems && !hasSecs) continue;
+            DATA.forEach(block => {
+                const items = (block.items || []).filter(it => !q || it.text.toLowerCase().includes(q));
+                const sections = (block.sections || []).filter(s => !wantDay || s.id === wantDay).map(s => ({ ...s, items: s.items.filter(it => !q || it.text.toLowerCase().includes(q)) })).filter(s => s.items.length > 0);
+                if(!items.length && !sections.length) return;
 
-                const card = document.createElement("section");
-                card.className = "cardBlock";
+                const card = document.createElement("section"); card.className = "cardBlock";
                 card.innerHTML = `<div class="cardHead"><div><h3>${block.title}</h3><div class="small">${block.desc||""}</div></div></div>`;
-                const body = document.createElement("div");
-                body.className = "cardBody";
-
-                if(hasItems) body.appendChild(renderList(block.items));
-                if(hasSecs){
-                    for(const sec of block.sections){
-                        const sDiv = document.createElement("div");
-                        sDiv.className = "section";
-                        const done = sec.items.filter(it => checked[it.id]).length;
-                        const pct = Math.round(done/sec.items.length*100);
-                        sDiv.innerHTML = `<div class="sectionTitleRow"><div class="sectionTitle">${sec.title}</div><div class="badge">${done}/${sec.items.length} • ${pct}%</div></div>`;
-                        sDiv.appendChild(renderList(sec.items));
-                        body.appendChild(sDiv);
-                    }
-                }
-                card.appendChild(body);
-                appEl.appendChild(card);
-            }
-            updateProgressUI();
+                const body = document.createElement("div"); body.className = "cardBody";
+                if(items.length) body.appendChild(renderList(items));
+                sections.forEach(s => {
+                    const sDiv = document.createElement("div"); sDiv.className = "section";
+                    const done = s.items.filter(it => checked[it.id]).length;
+                    sDiv.innerHTML = `<div class="sectionTitleRow"><div class="sectionTitle">${s.title}</div><div class="badge">${done}/${s.items.length}</div></div>`;
+                    sDiv.appendChild(renderList(s.items)); body.appendChild(sDiv);
+                });
+                card.appendChild(body); appEl.appendChild(card);
+            });
+            updateUI();
         }
 
         function renderList(items){
             const ul = document.createElement("ul");
-            for(const it of items){
-                const li = document.createElement("li");
-                li.className = "task";
-                const isChecked = !!checked[it.id];
-                li.innerHTML = `<label class="taskRow"><input type="checkbox" ${isChecked?'checked':''}><div class="taskText ${isChecked?'done':''}">${it.text}</div></label>`;
-                li.querySelector('input').onchange = async (e) => {
-                    const status = e.target.checked;
-                    checked[it.id] = status;
-                    render();
-                    await apiCall({ action: 'toggle', item_id: it.id, checked: status });
+            items.forEach(it => {
+                const li = document.createElement("li"); li.className = "task";
+                li.innerHTML = `<label class="taskRow"><input type="checkbox" ${checked[it.id]?'checked':''}><div class="taskText ${checked[it.id]?'done':''}">${it.text}</div></label>`;
+                li.querySelector('input').onchange = (e) => {
+                    checked[it.id] = e.target.checked; render(); debouncedSave();
                 };
                 ul.appendChild(li);
-            }
+            });
             return ul;
+        }
+
+        function updateUI(){
+            let done = 0, total = 0;
+            for(const b of DATA){
+                if(b.items){ total += b.items.length; b.items.forEach(it => { if(checked[it.id]) done++; }); }
+                if(b.sections){ b.sections.forEach(s => { total += s.items.length; s.items.forEach(it => { if(checked[it.id]) done++; }); }); }
+            }
+            const pct = total ? Math.round(done/total*100) : 0;
+            progressText.textContent = `${done}/${total} • ${pct}%`; percentText.textContent = `${pct}%`;
+            doneText.textContent = `Done: ${done}`; totalText.textContent = `Total: ${total}`;
+            barFill.style.width = `${pct}%`;
         }
 
         daySelect.onchange = (e) => { selectedDay = e.target.value; render(); };
         searchInput.oninput = (e) => { query = e.target.value; render(); };
-        
-        resetBtn.onclick = async () => {
-            if(!confirm("Reset toàn bộ?")) return;
-            checked = buildDefaultState();
-            render();
-            await apiCall({ action: 'saveAll', data: checked });
+        resetBtn.onclick = async () => { if(confirm("Reset?")){ checked = buildDefaultState(); render(); apiCall({ action: 'saveAll', data: checked }); }};
+        markVisibleBtn.onclick = () => {
+            const q = query.trim().toLowerCase(), wantDay = selectedDay !== "all" ? selectedDay : null;
+            DATA.forEach(b => {
+                (b.items || []).filter(it => !q || it.text.toLowerCase().includes(q)).forEach(it => checked[it.id] = true);
+                (b.sections || []).filter(s => !wantDay || s.id === wantDay).forEach(s => s.items.filter(it => !q || it.text.toLowerCase().includes(q)).forEach(it => checked[it.id] = true));
+            });
+            render(); debouncedSave();
         };
 
-        markVisibleBtn.onclick = async () => {
-            const filtered = filterData();
-            for(const b of filtered){
-                if(b.items) for(const it of b.items) checked[it.id] = true;
-                if(b.sections) for(const s of b.sections) for(const it of s.items) checked[it.id] = true;
-            }
-            render();
-            await apiCall({ action: 'saveAll', data: checked });
-        };
-
-        buildDayOptions();
-        loadData();
+        init();
     </script>
 </body>
 </html>
